@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "su-pn-psu/yii2-core": "dev-master"
+        "su-pn-psu/yii2-core": "dev-master",
+        "su-pn-psu/yii2-room": "dev-master"
     },
     "autoload": {
         "psr-4": {
