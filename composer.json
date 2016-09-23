@@ -1,13 +1,13 @@
 {
-    "name": "su-pn-psu/yii2-request-room",
-    "description": "Borrow material management system for Yii2.",
+    "name": "su-pn-psu/yii2-reserve-room",
+    "description": "Reserve room management system for Yii2.",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"],
     "license": "GPL-3.0",
     "minimum-stability": "stable",
     "support": {
-        "source": "https://github.com/su-pn-psu/yii2-request-room.git",
-        "issues": "https://github.com/su-pn-psu/yii2-request-room/issues"
+        "source": "https://github.com/su-pn-psu/yii2-reserve-room.git",
+        "issues": "https://github.com/su-pn-psu/yii2-reserve-room/issues"
     },
     "authors": [
         {
@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "suPnPsu\\requestRoom\\": ""
+            "suPnPsu\\reserveRoom\\": ""
         }
     }
 }
