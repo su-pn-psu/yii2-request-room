@@ -18,7 +18,8 @@
     ],
     "require": {
         "su-pn-psu/yii2-core": "dev-master",
-        "su-pn-psu/yii2-room": "dev-master"
+        "su-pn-psu/yii2-room": "dev-master",
+        "philippfrenzel/yii2fullcalendar": "*"
     },
     "autoload": {
         "psr-4": {
