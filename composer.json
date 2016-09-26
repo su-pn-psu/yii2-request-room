@@ -20,7 +20,7 @@
         "su-pn-psu/yii2-core": "dev-master",
         "su-pn-psu/yii2-room": "dev-master",
         "philippfrenzel/yii2fullcalendar": "*",
-        "yiisoft/yii2-jui": "*""yiisoft/yii2-jui": "*"
+        "yiisoft/yii2-jui": "*"
     },
     "autoload": {
         "psr-4": {
