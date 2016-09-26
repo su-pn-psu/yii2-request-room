@@ -18,8 +18,8 @@ class RoomReserveSearch extends RoomReserve
     public function rules()
     {
         return [
-            [['id', 'room_id', 'status', 'user_id', 'staff_id', 'staff_at', 'note', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['subject', 'date_start', 'date_end', 'time_start', 'time_end'], 'safe'],
+            [['id', 'room_id', 'status', 'user_id', 'confirmed_by', 'confirmed_at', 'returned_by', 'returned_at', 'note', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['subject', 'date_start', 'date_end', 'time_start', 'time_end', 'confirmed_comment', 'returned_comment'], 'safe'],
         ];
     }
 
@@ -67,8 +67,10 @@ class RoomReserveSearch extends RoomReserve
             'time_end' => $this->time_end,
             'status' => $this->status,
             'user_id' => $this->user_id,
-            'staff_id' => $this->staff_id,
-            'staff_at' => $this->staff_at,
+            'confirmed_by' => $this->confirmed_by,
+            'confirmed_at' => $this->confirmed_at,
+            'returned_by' => $this->returned_by,
+            'returned_at' => $this->returned_at,
             'note' => $this->note,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
@@ -76,7 +78,9 @@ class RoomReserveSearch extends RoomReserve
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'subject', $this->subject]);
+        $query->andFilterWhere(['like', 'subject', $this->subject])
+            ->andFilterWhere(['like', 'confirmed_comment', $this->confirmed_comment])
+            ->andFilterWhere(['like', 'returned_comment', $this->returned_comment]);
 
         return $dataProvider;
     }

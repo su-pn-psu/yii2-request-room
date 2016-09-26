@@ -3,29 +3,11 @@
 use yii\bootstrap\Html;
 use mdm\admin\components\Helper;
 use yii\helpers\Url;
-?>
-<?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
-    <?php
-    echo kartik\widgets\Growl::widget([
-        'type' => (!empty($message['type'])) ? $message['type'] : 'danger',
-        //'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-        'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
-        'showSeparator' => true,
-        'delay' => 1, //This delay is how long before the message shows
-        'pluginOptions' => [
-            'delay' => (!empty($message['duration'])) ? $message['duration'] : 3000, //This delay is how long the message shows for
-            'placement' => [
-                'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-                'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'center',
-            ]
-        ]
-    ]);
-    ?>
-<?php endforeach;
+
 $module = $this->context->module->id;
 
-$this->beginContent('@app/views/layouts/main.php'); ?>
+$this->beginContent('@app/views/layouts/main.php'); 
+?>
 
 <div class="row">
     <div class="col-md-3 hidden-print">
@@ -35,35 +17,38 @@ $this->beginContent('@app/views/layouts/main.php'); ?>
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">ระบบยืม-คืนพัสดุครุภัณฑ์</h3>
+                    <h3 class="panel-title">ระบบขอใช้ห้อง</h3>
                     
                 </div>
 
                 <div class="panel-body">  
-                    <p><a href="<?=Url::to(["/{$module}/default/create"])?>" class="btn btn-success btn-block"><i class="fa fa-plus"></i> ขอยืมพัสดุ</a></p>
+                    <p><a href="<?=Url::to(["/{$module}/default/create"])?>" class="btn btn-success btn-block"><i class="fa fa-plus"></i> ขอใช้ห้อง</a></p>
 
                     <?php
                     $menuItems = [
                             [
-                            'label' => Html::icon('cloud-upload') . ' ' . Yii::t('borrow-material', 'แบบฟอร์มที่ยังไม่ยื่น'),
-                            'url' => ['/borrow-material/default/draft'],
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'ข้อมูลทั้งหมด'),
+                            'url' => ['/reserve-room/default/index'], 
                         ],
                             [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'รออนุมัติ'),
-                            'url' => ['/borrow-material/default/submited'],
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'ร่างแบบฟอร์ม'),
+                            'url' => ['/reserve-room/default/draft'], #0
                         ],
                             [
-                            'label' => Html::icon('export') . ' ' . Yii::t('app', 'ยังไม่มารับ'),
-                            'url' => ['/borrow-material/default/approved'],
+                            'label' => Html::icon('export') . ' ' . Yii::t('app', 'ยืนเสนอ'),
+                            'url' => ['/reserve-room/default/offer'], #1
                         ],
                             [
-                            'label' => Html::icon('import') . ' ' . Yii::t('app', 'ยังไม่ส่งคืน'),
-                            'url' => ['/borrow-material/default/returned'],
+                            'label' => Html::icon('import') . ' ' . Yii::t('app', 'ผลการพิจารณา'),
+                            'url' => ['/reserve-room/default/result'], #2-3
                         ],
                             [
-                            'label' => Html::icon('duplicate') . ' ' . Yii::t('app', 'ข้อมูลทั้งหมด'),
-                            'url' => ['/borrow-material/default/all'],
-                        //'linkOptions' => [...],
+                            'label' => Html::icon('duplicate') . ' ' . Yii::t('app', 'รายการใช้ห้อง'),
+                            'url' => ['/reserve-room/default/user'], #2
+                        ],
+                            [
+                            'label' => Html::icon('duplicate') . ' ' . Yii::t('app', 'รายการที่คืนห้องแล้ว'),
+                            'url' => ['/reserve-room/default/returned'], #4
                         ],
                     ];
 

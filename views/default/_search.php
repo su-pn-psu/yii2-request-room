@@ -33,9 +33,17 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'user_id') ?>
 
-    <?php // echo $form->field($model, 'staff_id') ?>
+    <?php // echo $form->field($model, 'confirmed_comment') ?>
 
-    <?php // echo $form->field($model, 'staff_at') ?>
+    <?php // echo $form->field($model, 'confirmed_by') ?>
+
+    <?php // echo $form->field($model, 'confirmed_at') ?>
+
+    <?php // echo $form->field($model, 'returned_comment') ?>
+
+    <?php // echo $form->field($model, 'returned_by') ?>
+
+    <?php // echo $form->field($model, 'returned_at') ?>
 
     <?php // echo $form->field($model, 'note') ?>
 
