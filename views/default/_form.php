@@ -7,6 +7,8 @@ use yii\helpers\Url;
 use kartik\widgets\DatePicker;
 use kartik\widgets\TimePicker;
 
+list(,$url) = Yii::$app->assetManager->publish('@suPnPsu/reserveRoom/assets');
+
 /* @var $this yii\web\View */
 /* @var $model suPnPsu\reserveRoom\models\RoomReserve */
 /* @var $form yii\widgets\ActiveForm */
@@ -106,19 +108,39 @@ use kartik\widgets\TimePicker;
     ]);
     echo "<div id='main-content'>" . Yii::$app->runAction('/reserve-room/default/room-list') . "</div>";
     Modal::end();
+    
+        
+    $this->registerJsFile($url.'/js/create.js');
     ?>
 
     <?php
+    
     $js = " 
+        
        $(function(){
     
       $(document).on('click', '.showModalButton', function(){ 
+      
+        if(!chkDatetime())return false;
+
+
       $('#modal').modal('show');
       $('#modalHeader').html('<h4>' + $(this).attr('title') + '</h4>');
 
 //$('#new_country').on('pjax:end', function() {
             $.pjax.reload({container:'#room-list'});  //Reload GridView
         //});
+        
+
+$('#room-list').on('pjax:end', function() {
+            /*alert(11);  //Reload GridView
+            $('.select_room').each(function(index){
+                alert($(this).data('key'));
+            });*/
+            
+            
+        });
+        
 
 
       /*
@@ -155,8 +177,36 @@ use kartik\widgets\TimePicker;
                 }); 
                 */
            });
+           
             
-        });
+        }); //$(function)
+        
+
+        /* แปลงวันที่เป็น timestamp */
+        function chkDatetime(){
+            var date_start = $('input#roomreserve-date_start').val();
+            var time_start = $('input#roomreserve-time_start').val();
+            var time_end = $('input#roomreserve-time_end').val();
+            if(!date_start){
+                alert('กรุณาเลือกวันที่');
+                return false;
+            }
+            
+            return true;
+        }
+        /* แปลงวันที่เป็น timestamp */
+        function toTimeStamp(strDate,strTime){
+            if(strDate){
+            datetime = (strTime)?strDate+' '+strTime:strDate+' 00:00:00';
+            return Date.parse(datetime+'-0500')/1000;
+            }
+            return false;
+        }
+
+
+
+
+
         ";
 
     $this->registerJs($js);
