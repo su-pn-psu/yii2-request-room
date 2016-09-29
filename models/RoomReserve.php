@@ -6,7 +6,9 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use suPnPsu\room\models\Room;
 use suPnPsu\user\models\User;
-
+use suPnPsu\borrowMaterial\models\StdBelongto;
+use suPnPsu\borrowMaterial\models\StdPosition;
+use yii\helpers\Html;
 /**
  * This is the model class for table "room_reserve".
  *
@@ -62,7 +64,10 @@ class RoomReserve extends \yii\db\ActiveRecord
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::className(), 'targetAttribute' => ['room_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],            
+            [['belongto_id'], 'exist', 'skipOnError' => true, 'targetClass' => StdBelongto::className(), 'targetAttribute' => ['belongto_id' => 'id']],
+            [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => StdPosition::className(), 'targetAttribute' => ['position_id' => 'id']],
+            
             [['confirmed_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['confirmed_by' => 'id']],
             [['returned_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['returned_by' => 'id']],
         ];
@@ -83,6 +88,8 @@ class RoomReserve extends \yii\db\ActiveRecord
             'time_end' => Yii::t('app', 'ถึงเวลา'),
             'status' => Yii::t('app', 'สถานะ'),
             'user_id' => Yii::t('app', 'ผู้ยืนขอใช้'),
+            'belongto_id' => 'สังกัดองค์กร',
+            'position_id' => 'ตำแหน่ง',
             'confirmed_comment' => Yii::t('app', 'Confirmed Comment'),
             'confirmed_by' => Yii::t('app', 'อนุมัติโดย'),
             'confirmed_at' => Yii::t('app', 'อนุมัติเมื่อ'),
@@ -95,6 +102,7 @@ class RoomReserve extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'ปรับปรุงเมื่อ'),
             'updated_by' => Yii::t('app', 'ปรับปรุงโดย'),
             'time_range' => Yii::t('app', 'ช่วงเวลา'),
+            'date_range' => Yii::t('app', 'วันเวลา'),
         ];
     }
 
@@ -196,6 +204,10 @@ class RoomReserve extends \yii\db\ActiveRecord
         return Yii::$app->formatter->asTime($this->time_start) .' - '. Yii::$app->formatter->asTime($this->time_end) ;
         
     }
+    public function getDateRange(){
+        return Yii::$app->formatter->asDate($this->date_start).'<br/>'.Html::tag('small','<i class="fa fa-clock-o"></i> '. Yii::$app->formatter->asTime($this->time_start) .' - '. Yii::$app->formatter->asTime($this->time_end).Yii::t('app','น.')) ;
+        
+    }
     
     
     public static function getActivity()
@@ -207,16 +219,21 @@ class RoomReserve extends \yii\db\ActiveRecord
         foreach ($activity as $act) {
             $Event = new \yii2fullcalendar\models\Event();
             $Event->id = $act->id;
-            $Event->title = $act->title;
-            //$Event->color = $act->calendar->color;
-            $Event->start = Yii::$app->formatter->asDate($act->date_start, 'php:Y-m-d');
-            $Event->end = Yii::$app->formatter->asDate($act->date_start, 'php:Y-m-d');
+            $Event->title = $act->room->title." เรื่อง:".$act->subject." ขอใช้โดย​:".$act->createdBy->username;
+            $Event->backgroundColor = $act->room->stylies->backgroundColor;
+            $Event->textColor = $act->room->stylies->textColor;
+            $Event->borderColor = $act->room->stylies->borderColor;
+            //date('Y-m-d\TH:i:s\Z',strtotime($time->date_start.' '.$time->time_start));
+            $Event->start = date('Y-m-d\TH:i:s\Z',strtotime($act->date_start.' '.$act->time_start));
+            $Event->end = date('Y-m-d\TH:i:s\Z',strtotime($act->date_start.' '.$act->time_end));
             $Event->editable = false;
-            $Event->allDay = true ;
+            $Event->allDay = false ;
             $Event->durationEditable = false;
             $Event->startEditable = false;
             $events[] = $Event;
         }
         return $events;
     }
+    
+    
 }
