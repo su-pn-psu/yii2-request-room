@@ -10,8 +10,8 @@ use suPnPsu\reserveRoom\models\RoomReserve;
 /**
  * RoomReserveSearch represents the model behind the search form about `suPnPsu\reserveRoom\models\RoomReserve`.
  */
-class RoomReservePresentSearch extends RoomReserveSearch
-{    
+class RoomReserveDefaultIndexSearch extends RoomReserveSearch {
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -19,8 +19,7 @@ class RoomReservePresentSearch extends RoomReserveSearch
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = RoomReserve::find();
 
         // add conditions that should always apply here
@@ -28,11 +27,12 @@ class RoomReservePresentSearch extends RoomReserveSearch
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        
-        $query->where(['>=','date(date_start)',date("Y-m-d")]);
-        $query->andWhere(['status'=>[2]]);
-        
-        
+
+
+        $query->where([
+        'user_id' => Yii::$app->user->id,
+        'status' => [2]
+        ]);
 
         $this->load($params);
 
@@ -64,9 +64,10 @@ class RoomReservePresentSearch extends RoomReserveSearch
         ]);
 
         $query->andFilterWhere(['like', 'subject', $this->subject])
-            ->andFilterWhere(['like', 'confirmed_comment', $this->confirmed_comment])
-            ->andFilterWhere(['like', 'returned_comment', $this->returned_comment]);
+                ->andFilterWhere(['like', 'confirmed_comment', $this->confirmed_comment])
+                ->andFilterWhere(['like', 'returned_comment', $this->returned_comment]);
 
         return $dataProvider;
     }
+
 }

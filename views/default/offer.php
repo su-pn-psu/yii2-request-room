@@ -3,20 +3,19 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use kartik\widgets\DateTimePicker;
 use suPnPsu\reserveRoom\models\RoomReserve;
+use kartik\widgets\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel suPnPsu\reserveRoom\models\RoomReserveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'รายการขอใช้ทั้งหมด');
+$this->title = Yii::t('app', 'ระบบขอใช้ห้อง');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class='box'>
-
-    <div class='box-body'>
+<div class='box'>    
+    <div class='box-body'>        
 
         <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
 
@@ -36,13 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => 'room.title'
                 ],
                 'subject',
-                    [
+                //'date_start:date',
+                //'timeRange',
+                [
                     'attribute' => 'date_range',
                     'format' => 'html',
                     'filter' => DateTimePicker::widget([
-                        'model' => $searchModel,
+                        'model'=> $searchModel,
                         'attribute' => 'date_range',
-                        'type' => DateTimePicker::TYPE_INPUT,
+                        'type' => DateTimePicker::TYPE_INPUT,                        
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => 'yyyy-mm-dd hh:ii'
@@ -50,18 +51,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'value' => 'dateRange'
                 ],
-                    [
-                    'attribute' => 'status',
-                    'format' => 'html',
-                    'filter' => RoomReserve::getItemStatus(),
-                    'value' => 'statusLabel'
-                ],
+                'sent_at:datetime',
+//                    [
+//                    'attribute' => 'status',
+//                    'format' => 'html',
+//                    'filter' => RoomReserve::getItemStatus(),
+//                    'value' => 'statusLabel'
+//                ],
                     [
                     'content' => function($model) {
                         return Html::a('ตรวจสอบ', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']);
                     }
                 ],
-            //['class' => 'yii\grid\ActionColumn'],
             ],
         ]);
         ?>

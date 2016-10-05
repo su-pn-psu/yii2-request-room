@@ -18,7 +18,7 @@ $asset = Asset::register($this);
 
 list(, $url) = Yii::$app->assetManager->publish('@suPnPsu/reserveRoom/assets');
 
-$user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->user->id)->one();
+$user = $model->user_id ? $model->user->profile->resultInfo : Yii::$app->user->identity->profile->resultInfo;
 
 /* @var $this yii\web\View */
 /* @var $model suPnPsu\reserveRoom\models\RoomReserve */
@@ -47,19 +47,47 @@ $user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->
             </div>
         </div>
 
-        <div class="room">
-            <div class="col-md-10 col-md-offset-2">
-                <?php
-                echo $user->profile->attributeLabels()['user_id'] . ' <u>' . $model->user->profile->user_id . '</u> ';
-                echo $user->profile->attributeLabels()['fullname'] . ' <u>' . $model->user->profile->fullname . '</u> ';
-                ?>
+        <div class="row">
+            <div class="col-sm-4 text-center col-sm-offset-8">
+                วันที่ <?= Yii::$app->formatter->asDate(date("Y-m-d"), 'long') ?>
             </div>
         </div>
+
+
+        <div class="room">
+            <div class="col-md-12">
+                <br/>
+                <br/>
+                <p style="text-indent: 10%;line-height: 25px;">
+
+                    ข้าพเจ้า
+                    <span class="text-underline">
+                        <?= $user->fullname; ?>
+                    </span>
+
+                    รหัสศึกษา
+                    <span class="text-underline">
+                        <?= $user->username; ?>
+                    </span>
+
+                    สาขาวิชา
+                    <span class="text-underline">
+                        <?= $user->major; ?>
+                    </span>
+
+                    คณะ
+                    <span class="text-underline">
+                        <?= $user->faculty; ?>
+                    </span>
+                </p>
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="col-md-6">
                 <?php Pjax::begin(['id' => 'belpjax']); ?>
                 <?php
-                echo $form->field($model, 'belongto_id', [                    
+                echo $form->field($model, 'belongto_id', [
                     'inputTemplate' => '<div class="input-group">{input}<span class="input-group-btn"><button type="button" class="btn btn-success _belqadd" value="' . Url::to(['/borrow-material/default/qaddbelongto']) . '" title="add belong to" data-toggle="tooltip"><span class="glyphicon glyphicon-plus"></span></button></div>',
                 ])->widget(Select2::classname(), [
                     'data' => StdBelongto::getList(),
@@ -78,7 +106,7 @@ $user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->
             <div class="col-md-6">
                 <?php Pjax::begin(['id' => 'posipjax']); ?>
                 <?php
-                echo $form->field($model, 'position_id', [                    
+                echo $form->field($model, 'position_id', [
                     'inputTemplate' => '<div class="input-group">{input}<span class="input-group-btn"><button type="button" class="btn btn-success _invttqadd" value="' . Url::to(['/borrow-material/default/qaddposition']) . '" title="add position of belong to" data-toggle="tooltip"><span class="glyphicon glyphicon-plus"></span></button></div>',
                 ])->widget(Select2::classname(), [
                     'data' => StdPosition::getList(),
@@ -108,9 +136,7 @@ $user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->
                         'autoclose' => true,
                         'todayHighlight' => true,
                         'format' => 'yyyy-mm-dd',
-                        //'daysOfWeekDisabled'=>true
-                        //'datesDisabled'=> ['0','6']
-                        'startDate'=> date('Y-m-d',strtotime("+3 day"))
+                        'startDate' => date('Y-m-d', strtotime("+3 day"))
                     ]
                 ])
                 ?>
@@ -139,30 +165,44 @@ $user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->
 
         <div class="row">
             <div class="col-md-12">
-                
-                <?= $form->field($model, 'room_id')->hiddenInput()?>
+
+                <?= $form->field($model, 'room_id')->hiddenInput() ?>
                 <div class="form-group">
                     <?= Html::button('+ เลือกห้อง', ['value' => Url::to(['/reserve-room/default/room-list']), 'title' => 'เลือกห้อง', 'class' => 'showModalButton btn btn-primary']); ?>
                 </div>
 
                 <div class="data">
-                    <table class="table table-border">                        
+                    <table class="table table-bordered">                        
                         <tr>
                             <th >ห้อง</th>
                             <th >รายละเอียด</th>
-                            
+
                         </tr>
                         <tr>
                             <td class="room_tile">
-                                <?=$model->room_id?$model->room->title:null?>
+                                <?= $model->room_id ? $model->room->title : null ?>
                             </td>
-                            <td class="room_detail">
-                                <?=$model->room_id?$model->room->details:null?>                           
+                            <td class="room_details">
+                                <?= $model->room_id ? $model->room->details : null ?>                           
                             </td>                            
                         </tr>
                     </table>
                 </div>
-                
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-8 text-center">
+                <br/><br/>
+                ลงชื่อ 
+                <span class="text-underline">
+                    <?= $user->fullname; ?>
+                </span>
+                <?= $model->getAttributeLabel('user_id') ?> <br />
+                ( <?= $user->fullname ?> ) <br />
+                <?= $user->fullname ?> <?= $model->getAttributeLabel('user_id') ?> <br />
 
             </div>
         </div>
@@ -177,36 +217,37 @@ $user = $model->user_id?$model->user:\suPnPsu\user\models\User::find(Yii::$app->
         <?php ActiveForm::end(); ?>
 
     </div>
+</div>
 
-    <?php
-    Modal::begin([
-        'headerOptions' => ['id' => 'modalHeader'],
-        'id' => 'modal',
-        'size' => 'modal-lg',
-        'clientOptions' => [
-            'backdrop' => 'static',
-        //'keyboard' => FALSE
-        ],
-        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">ปิด</a>',
-    ]);
-    echo "<div id='main-content'>" . Yii::$app->runAction('/reserve-room/default/room-list') . "</div>";
-    Modal::end();
+<?php
+Modal::begin([
+    'headerOptions' => ['id' => 'modalHeader'],
+    'id' => 'modal',
+    'size' => 'modal-lg',
+    'clientOptions' => [
+        'backdrop' => 'static',
+    //'keyboard' => FALSE
+    ],
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">ปิด</a>',
+]);
+echo "<div id='main-content'>" . Yii::$app->runAction('/reserve-room/default/room-list') . "</div>";
+Modal::end();
 
 
 
-    $js = ' 
+$js = ' 
  var urlChkRoom = "' . Url::to(['/reserve-room/default/check-room'], true) . '";
 ';
 
-    $this->registerJs($js, View::POS_HEAD);
-    $this->registerJsFile($asset->baseUrl . '/js/create.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-    ?>
-    
-    <?php
-    Modal::begin([
-        'header' => 'Quick Op',
-        'id' => 'modal1',
-    ]);
-    echo '<div id ="modalcontent"></div>';
-    Modal::end();
-    ?>
+$this->registerJs($js, View::POS_HEAD);
+$this->registerJsFile($asset->baseUrl . '/js/create.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+?>
+
+<?php
+Modal::begin([
+    'header' => 'Quick Op',
+    'id' => 'modal1',
+]);
+echo '<div id ="modalcontent"></div>';
+Modal::end();
+?>

@@ -4,13 +4,12 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\widgets\DateTimePicker;
-use suPnPsu\reserveRoom\models\RoomReserve;
 
 /* @var $this yii\web\View */
 /* @var $searchModel suPnPsu\reserveRoom\models\RoomReserveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'รายการขอใช้ทั้งหมด');
+$this->title = Yii::t('app', 'รายการห้องที่คืนแล้ว');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -50,15 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'value' => 'dateRange'
                 ],
+               
                     [
-                    'attribute' => 'status',
-                    'format' => 'html',
-                    'filter' => RoomReserve::getItemStatus(),
-                    'value' => 'statusLabel'
+                    'attribute' => 'returned_by',
+                    'value' => 'returnedBy.profile.fullname'
                 ],
+                'returned_at:datetime',
                     [
                     'content' => function($model) {
-                        return Html::a('ตรวจสอบ', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']);
+                        return Html::a('ตรวจสอบ', ['view', 'id' => $model->id], ['class' => 'btn btn-info']);
                     }
                 ],
             //['class' => 'yii\grid\ActionColumn'],

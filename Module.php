@@ -7,6 +7,10 @@ namespace suPnPsu\reserveRoom;
  */
 class Module extends \yii\base\Module
 {
+    
+    
+    public $uploadDir = '';
+    public $uploadUrl = '';
     /**
      * @inheritdoc
      */

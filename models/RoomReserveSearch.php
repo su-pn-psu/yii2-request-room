@@ -19,9 +19,11 @@ class RoomReserveSearch extends RoomReserve
     {
         return [
             [['id', 'room_id', 'status', 'user_id', 'confirmed_by', 'confirmed_at', 'returned_by', 'returned_at', 'note', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['subject', 'date_start', 'date_end', 'time_start', 'time_end', 'confirmed_comment', 'returned_comment'], 'safe'],
+            [['subject', 'date_start', 'date_end', 'time_start', 'time_end', 'confirmed_comment', 'returned_comment','date_range'], 'safe'],
         ];
     }
+    
+    
 
     /**
      * @inheritdoc
@@ -31,6 +33,10 @@ class RoomReserveSearch extends RoomReserve
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
+    
+    public $date_start;
+    
+    public $date_range;
 
     /**
      * Creates data provider instance with search query applied
@@ -77,6 +83,12 @@ class RoomReserveSearch extends RoomReserve
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
         ]);
+        
+        list($date1,$time1) = @explode(' ', $this->date_range);
+        
+        $query->andFilterWhere(['>=','date(date_start)',$date1]);
+        $query->andFilterWhere(['>=','time(time_start)' ,$time1]);
+        //$query->andFilterWhere(['<=','time(time_end)', $time1]);
 
         $query->andFilterWhere(['like', 'subject', $this->subject])
             ->andFilterWhere(['like', 'confirmed_comment', $this->confirmed_comment])

@@ -1,6 +1,6 @@
 <?php
 
-namespace suPnPsu\borrowMaterial\components;
+namespace suPnPsu\reserveRoom\components;
 
 //use yii\base\Model;
 use Yii;
@@ -20,14 +20,13 @@ class Navigate extends \firdows\menu\models\Navigate {
 
         switch ($router) {            
 
-            case "{$module}/brwretrn/submitedlist":
-                $searchModel = new \suPnPsu\borrowMaterial\models\BookingsubmitedSearch();
+            case "{$module}":
+                $searchModel = new \suPnPsu\reserveRoom\models\RoomReserveDefaultIndexSearch();
                 $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                 $count = $dataProvider->getTotalCount();
-
-                $count = $count ? Html::tag('b', ' (' . $count . ')') : '';
+                //$count = $count ? Html::tag('b',  ' ('.$count.')',['class'=>'text-default']) : '';
+                $count = $count ? Html::tag('span',  $count,['class'=>'badge pull-right']) : '';
                 break;
-
         }
         
         return $count;

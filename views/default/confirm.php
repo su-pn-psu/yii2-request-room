@@ -1,62 +1,36 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model suPnPsu\reserveRoom\models\RoomReserve */
 
-$this->title = $model->id;
+$this->title = $model->subject;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Room Reserves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$user = $model->user;
 ?>
-<div class='box box-info'>
-    <div class='box-header'>
-        <h3 class='box-title'><?= Html::encode($this->title) ?></h3>
-    </div><!--box-header -->
+<div class='box'>
+    <div class='box-body'>
+        <div class="row">
+            <div class="col-md-12">
 
-    <div class='box-body pad'>
-        <div class="room-reserve-view">
 
-            <!--<h1><?= Html::encode($this->title) ?></h1>-->
+                <?=$this->render('_viewPaper',['model'=>$model]);?>
 
-            <p>
-                <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-                ],
-                ]) ?>
-            </p>
+                <?php $form = ActiveForm::begin(); ?> 
+                <?= $form->field($model, 'id')->hiddenInput()->label(false); ?>
 
-            <?= DetailView::widget([
-            'model' => $model,
-            'attributes' => [
-                        'id',
-            'room_id',
-            'subject',
-            'date_start',
-            'date_end',
-            'time_start',
-            'time_end',
-            'status',
-            'user_id',
-            'confirmed_comment:ntext',
-            'confirmed_by',
-            'confirmed_at',
-            'returned_comment:ntext',
-            'returned_by',
-            'returned_at',
-            'note',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
-            ],
-            ]) ?>
+                <div class="form-group">
+                    <?= Html::a(Yii::t('app', 'แก้ไข'),['update','id'=>$model->id], ['class' => 'btn btn-primary', 'name' => 'edit']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'ยืนยัน'), ['class' => 'btn btn-success', 'name' => 'confirm']) ?>
+                </div>
+                <?php ActiveForm::end(); ?>
 
+
+            </div>
         </div>
     </div><!--box-body pad-->
 </div><!--box box-info-->

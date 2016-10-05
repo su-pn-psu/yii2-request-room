@@ -3,14 +3,20 @@
 namespace suPnPsu\reserveRoom\controllers;
 
 use Yii;
-use suPnPsu\room\models\Room;
+//use suPnPsu\room\models\Room;
 use suPnPsu\reserveRoom\models\RoomReserve;
-use suPnPsu\reserveRoom\models\RoomReserveSearch;
+//use suPnPsu\reserveRoom\models\RoomReserveSearch;
+use suPnPsu\reserveRoom\models\RoomReserveDefaultIndexSearch;
+use suPnPsu\reserveRoom\models\RoomReserveDefaultDraftSearch;
+use suPnPsu\reserveRoom\models\RoomReserveDefaultOfferSearch;
+use suPnPsu\reserveRoom\models\RoomReserveDefaultResultSearch;
+use suPnPsu\reserveRoom\models\RoomReserveDefaultReturnedSearch;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
-use suPnPsu\room\models\RoomSearch;
+//use yii\data\ActiveDataProvider;
+//use suPnPsu\room\models\RoomSearch;
 use suPnPsu\room\models\RoomListSearch;
 use yii\helpers\Json;
 
@@ -38,7 +44,7 @@ class DefaultController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new RoomReserveSearch();
+        $searchModel = new RoomReserveDefaultIndexSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -69,17 +75,20 @@ class DefaultController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $post = Yii::$app->request->post();
 
+            $model->status = 0;
             $model->user_id = Yii::$app->user->id;
             $model->created_by = Yii::$app->user->id;
+
             if ($model->save()) {
-                if(isset($post['submit']))                
-                return $this->redirect(['confirm', 'id' => $model->id]);
+                if (isset($post['submit'])) {
+                    return $this->redirect(['confirm', 'id' => $model->id]);
+                }
+                return $this->redirect(['update', 'id' => $model->id]);
             } else {
                 print_r($model->getErrors());
                 exit();
             }
         }
-
 
         return $this->render('create', [
                     'model' => $model,
@@ -100,10 +109,12 @@ class DefaultController extends Controller {
 
             $model->user_id = Yii::$app->user->id;
             $model->created_by = Yii::$app->user->id;
+            //if(date('Y-m-d',strtotime("+3 day"))<)
+
             if ($model->save()) {
-                if(isset($post['submit']))                               
-                return $this->redirect(['confirm', 'id' => $model->id]);
-                
+                if (isset($post['submit'])) {
+                    return $this->redirect(['confirm', 'id' => $model->id]);
+                }
             } else {
                 print_r($model->getErrors());
                 exit();
@@ -232,9 +243,60 @@ class DefaultController extends Controller {
     }
 
     public function actionConfirm($id) {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->sent_at = time();
+            $model->status = 1;
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }
+        }
         return $this->render('confirm', [
                     'model' => $this->findModel($id),
         ]);
     }
+    
+    
+    public function actionDraft() {
+        $searchModel = new RoomReserveDefaultDraftSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('draft', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionOffer() {
+        $searchModel = new RoomReserveDefaultOfferSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('offer', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionResult() {
+        $searchModel = new RoomReserveDefaultResultSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('result', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionReturned() {
+        $searchModel = new RoomReserveDefaultReturnedSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('returned', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
 
 }

@@ -27,33 +27,29 @@ $this->beginContent('@app/views/layouts/main.php');
                     <?php
                     $menuItems = [
                             [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'ข้อมูลทั้งหมด'),
-                            'url' => ['/reserve-room/default/index'], 
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'รายการใช้ห้อง'),
+                            'url' => ["/{$module}/default/index"], #2
                         ],
                             [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('app', 'ร่างแบบฟอร์ม'),
-                            'url' => ['/reserve-room/default/draft'], #0
+                            'url' => ["/{$module}/default/draft"], #0
                         ],
                             [
                             'label' => Html::icon('export') . ' ' . Yii::t('app', 'ยืนเสนอ'),
-                            'url' => ['/reserve-room/default/offer'], #1
+                            'url' => ["/{$module}/default/offer"], #1
                         ],
                             [
                             'label' => Html::icon('import') . ' ' . Yii::t('app', 'ผลการพิจารณา'),
-                            'url' => ['/reserve-room/default/result'], #2-3
-                        ],
-                            [
-                            'label' => Html::icon('duplicate') . ' ' . Yii::t('app', 'รายการใช้ห้อง'),
-                            'url' => ['/reserve-room/default/user'], #2
-                        ],
-                            [
+                            'url' => ["/{$module}/default/result"], #2-3
+                        ],                           
+                        [
                             'label' => Html::icon('duplicate') . ' ' . Yii::t('app', 'รายการที่คืนห้องแล้ว'),
-                            'url' => ['/reserve-room/default/returned'], #4
+                            'url' => ["/{$module}/default/returned"], #4
                         ],
                     ];
 
                     $menuItems = Helper::filter($menuItems);
-                    $menuItems = suPnPsu\borrowMaterial\components\FrontendNavigate::genCount($menuItems);
+                    $menuItems = suPnPsu\reserveRoom\components\FrontendNavigate::genCount($menuItems);
                     //$nav = new Navigate();
                     echo dmstr\widgets\Menu::widget([
                         'options' => ['class' => 'nav nav-pills nav-stacked'],
