@@ -64,7 +64,7 @@ class RoomReserveDefaultOfferSearch extends RoomReserveSearch {
         ]);
         
        
-         list($date1,$time1) = @explode(' ', $this->date_range);
+        list($date1,$time1) = $this->date_range?@explode(' ', $this->date_range):[null,null];
         
         $query->andFilterWhere(['>=','date(date_start)',$date1]);
         $query->andFilterWhere(['>=','time(time_start)' ,$time1]);
