@@ -26,7 +26,6 @@ use yii\widgets\ActiveForm;
 
 
 <?php
-
 Pjax::begin([
     'id' => 'room-list',
     'enablePushState' => false,

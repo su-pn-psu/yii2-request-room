@@ -134,8 +134,8 @@ $uploadUrl = $this->context->module->uploadUrl;
 
 
             (<span class="text-underline"><?= $user->profile->fullname ?></span>) <br />
-
-            <?= $user->profile->fullname ?> <?= $model->getAttributeLabel('user_id') ?> <br />
+                <?=(new suPnPsu\user\models\Person)->getAttributeLabel('position_id').' '. ($user->position?$user->position->title:'-') ?> <br />
+                <?=(new suPnPsu\user\models\Person)->getAttributeLabel('tel').' '. $user->tel ?> <br />
         </p>
 
     </div>

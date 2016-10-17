@@ -54,7 +54,7 @@ $user = $model->user_id ? $model->user->profile->resultInfo : Yii::$app->user->i
         </div>
 
 
-        <div class="room">
+        <div class="row">
             <div class="col-md-12">
                 <br/>
                 <br/>
@@ -166,11 +166,11 @@ $user = $model->user_id ? $model->user->profile->resultInfo : Yii::$app->user->i
         <div class="row">
             <div class="col-md-12">
 
-                <?= $form->field($model, 'room_id')->hiddenInput() ?>
+                
                 <div class="form-group">
                     <?= Html::button('+ เลือกห้อง', ['value' => Url::to(['/reserve-room/default/room-list']), 'title' => 'เลือกห้อง', 'class' => 'showModalButton btn btn-primary']); ?>
                 </div>
-
+                <?= $form->field($model, 'room_id')->hiddenInput()->label(false) ?>
                 <div class="data">
                     <table class="table table-bordered">                        
                         <tr>
@@ -201,8 +201,9 @@ $user = $model->user_id ? $model->user->profile->resultInfo : Yii::$app->user->i
                     <?= $user->fullname; ?>
                 </span>
                 <?= $model->getAttributeLabel('user_id') ?> <br />
-                ( <?= $user->fullname ?> ) <br />
-                <?= $user->fullname ?> <?= $model->getAttributeLabel('user_id') ?> <br />
+                (<span class="text-underline"> <?= $user->fullname ?> </span>) <br />
+                <?=(new suPnPsu\user\models\Person)->getAttributeLabel('position_id').' '. ($user->position?$user->position->title:'-') ?> <br />
+                <?=(new suPnPsu\user\models\Person)->getAttributeLabel('tel').' '. $user->tel ?> <br />
 
             </div>
         </div>

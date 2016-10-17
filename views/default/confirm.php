@@ -23,6 +23,7 @@ $user = $model->user;
                 <?php $form = ActiveForm::begin(); ?> 
                 <?= $form->field($model, 'id')->hiddenInput()->label(false); ?>
 
+                <br />
                 <div class="form-group">
                     <?= Html::a(Yii::t('app', 'แก้ไข'),['update','id'=>$model->id], ['class' => 'btn btn-primary', 'name' => 'edit']) ?>
                     <?= Html::submitButton(Yii::t('app', 'ยืนยัน'), ['class' => 'btn btn-success', 'name' => 'confirm']) ?>

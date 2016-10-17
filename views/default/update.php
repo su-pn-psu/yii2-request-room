@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model suPnPsu\reserveRoom\models\RoomReserve */
 
-$this->title = Yii::t('app', 'ปรับแก้ {modelClass}: ', [
+$this->title = Yii::t('app', 'ปรับแก้ฉบับร่าง {modelClass}: ', [
     'modelClass' => 'ขอใช้ในเรื่อง ',
 ]) . $model->subject;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'ระบบขอใช้ห้อง'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'รายการขอใช้ห้อง'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
